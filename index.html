@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ವಿಜ್ಞಾನ ಪಾಠ ಯೋಜನೆ ಮತ್ತು ಪ್ರಶ್ನೆ ಪತ್ರಿಕೆ ಜನರೇಟರ್</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #16a085;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            flex: 1;
+            max-width: 900px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            width: 90%;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex: 1;
+        }
+
+        button:hover {
+            background-color: #138d75;
+        }
+
+        .btn-secondary {
+            background-color: #7f8c8d;
+        }
+        .btn-secondary:hover {
+            background-color: #707b7c;
+        }
+
+        /* Footer styling with digital board blinking effect */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: auto;
+            font-size: 16px;
+        }
+
+        .footer-details {
+            margin-top: 5px;
+        }
+
+        .blinking-text {
+            font-weight: bold;
+            animation: digitalGlow 1.5s infinite alternate;
+        }
+
+        @keyframes digitalGlow {
+            0% { color: #00ffcc; text-shadow: 0 0 5px #00ffcc; }
+            50% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
+            100% { color: #ffff00; text-shadow: 0 0 5px #ffff00; }
+        }
+
+        /* Print styles to hide footer blinking in print */
+        @media print {
+            footer, .btn-container, .no-print {
+                display: none !important;
+            }
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                padding: 0;
+            }
+        }
+
+        .preview-box {
+            background: #fdfdfd;
+            border: 1px dashed #bdc3c7;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .question-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ಕರ್ನಾಟಕ ಸರ್ಕಾರ - 6ನೇ ತರಗತಿ ವಿಜ್ಞಾನ (ಕುತೂಹಲ)</h1>
+        <p>ಘಟಕ ಆಧಾರಿತ ಕಲಿಕಾ ಫಲಗಳು (LBA) ಮತ್ತು ಮೌಲ್ಯಮಾಪನ ವ್ಯವಸ್ಥೆ</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- PAGE 1: ENTRY SHEET -->
+        <div id="page-entry" class="page active">
+            <h2>ಪ್ರವೇಶ ಹಾಳೆ (Entry Sheet)</h2>
+            <form id="entryForm">
+                <div class="form-group">
+                    <label for="schoolNameInput">ಶಾಲೆಯ ಹೆಸರು (School Name):</label>
+                    <input type="text" id="schoolNameInput" required placeholder="ನಿಮ್ಮ ಶಾಲೆಯ ಹೆಸರನ್ನು ನಮೂದಿಸಿ">
+                </div>
+                <div class="form-group">
+                    <label for="teacherNameInput">ಶಿಕ್ಷಕರ ಹೆಸರು (Teacher Name):</label>
+                    <input type="text" id="teacherNameInput" required placeholder="ನಿಮ್ಮ ಹೆಸರನ್ನು ನಮೂದಿಸಿ">
+                </div>
+                <div class="form-group">
+                    <label for="lessonSelect">ಪಾಠವನ್ನು ಆಯ್ಕೆಮಾಡಿ (Select Lesson):</label>
+                    <select id="lessonSelect" required>
+                        <option value="">-- ಪಾಠವನ್ನು ಆಯ್ಕೆಮಾಡಿ --</option>
+                        <option value="1">ಅಧ್ಯಾಯ 1: ವಿಜ್ಞಾನದ ಅದ್ಭುತ ಪ್ರಪಂಚ</option>
+                        <option value="2">ಅಧ್ಯಾಯ 2: ಜೀವಜಗತ್ತಿನಲ್ಲಿ ವೈವಿಧ್ಯತೆ</option>
+                        <option value="3">ಅಧ್ಯಾಯ 3: ಮನದುಂಬಿದ ಊಟ : ಸ್ವಸ್ಥ ಶರೀರಕ್ಕೆ ಸೋಪಾನ</option>
+                        <option value="4">ಅಧ್ಯಾಯ 4: ಕಾಂತಗಳ ಅನ್ವೇಷಣೆ</option>
+                        <option value="5">ಅಧ್ಯಾಯ 5: ಉದ್ದದ ಅಳತೆ ಮತ್ತು ಚಲನೆ</option>
+                        <option value="6">ಅಧ್ಯಾಯ 6: ನಮ್ಮ ಸುತ್ತಲಿನ ಸಾಮಗ್ರಿಗಳು</option>
+                        <option value="7">ಅಧ್ಯಾಯ 7: ತಾಪ ಮತ್ತು ಅದರ ಮಾಪನ</option>
+                        <option value="8">ಅಧ್ಯಾಯ 8: ನೀರಿನ ಸ್ಥಿತಿಗಳ ಮೂಲಕ ಒಂದು ಪಯಣ</option>
+                        <option value="9">ಅಧ್ಯಾಯ 9: ದೈನಂದಿನ ಜೀವನದಲ್ಲಿ ಬೇರ್ಪಡಿಸುವಿಕೆಯ ವಿಧಾನಗಳು</option>
+                        <option value="10">ಅಧ್ಯಾಯ 10: ಜೀವಿಗಳು: ಅವುಗಳ ಗುಣಗಳ ಅನ್ವೇಷಣೆ</option>
+                    </select>
+                </div>
+                <div class="btn-container">
+                    <button type="button" onclick="goToLessonPlan()">ಮುಂದೆ (Next)</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- PAGE 2: LESSON PLAN -->
+        <div id="page-lesson-plan" class="page">
+            <h2>ಪಾಠ ಯೋಜನೆ (Lesson Plan - LBA)</h2>
+            <div class="preview-box" id="lessonPlanContent">
+                <!-- Dynamically filled -->
+            </div>
+            <div class="btn-container">
+                <button type="button" class="btn-secondary" onclick="switchPage('page-entry')">ಹಿಂದಕ್ಕೆ</button>
+                <button type="button" onclick="goToQuestionPaper()">ಪ್ರಶ್ನೆ ಪತ್ರಿಕೆ ರಚಿಸಿ (Generate Question Paper)</button>
+            </div>
+        </div>
+
+        <!-- PAGE 3: QUESTION PAPER -->
+        <div id="page-question-paper" class="page">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>ಘಟಕ ಆಧಾರಿತ ಮೌಲ್ಯಮಾಪನ ಪ್ರಶ್ನೆ ಪತ್ರಿಕೆ</h2>
+                <button type="button" onclick="window.print()" class="no-print" style="max-width: 150px; padding: 8px;">ಪ್ರಿಂಟ್ ಮಾಡಿ</button>
+            </div>
+            
+            <div class="preview-box" id="questionPaperContent">
+                <!-- Dynamically filled -->
+            </div>
+
+            <div class="btn-container no-print">
+                <button type="button" class="btn-secondary" onclick="switchPage('page-lesson-plan')">ಹಿಂದಕ್ಕೆ</button>
+                <button type="button" onclick="goToAnswers()">ಉತ್ತರಗಳನ್ನು ವೀಕ್ಷಿಸಿ (View Answers)</button>
+            </div>
+        </div>
+
+        <!-- PAGE 4: ANSWERS -->
+        <div id="page-answers" class="page">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>ಮಾದರಿ ಉತ್ತರಗಳು (Answer Key)</h2>
+                <button type="button" onclick="window.print()" class="no-print" style="max-width: 150px; padding: 8px;">ಪ್ರಿಂಟ್ ಮಾಡಿ</button>
+            </div>
+
+            <div class="preview-box" id="answersContent">
+                <!-- Dynamically filled -->
+            </div>
+
+            <div class="btn-container no-print">
+                <button type="button" class="btn-secondary" onclick="switchPage('page-question-paper')">ಪ್ರಶ್ನೆ ಪತ್ರಿಕೆಗೆ ಹಿಂತಿರುಗಿ</button>
+                <button type="button" onclick="resetApp()">ಮರುಹೊಂದಿಸಿ (Reset)</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div id="footerSchool" style="font-weight: bold;">ಶಾಲೆಯ ಹೆಸರು: [ನಮೂದಿಸಿಲ್ಲ]</div>
+        <div id="footerTeacher" style="font-size: 14px;">ಶಿಕ್ಷಕರ ಹೆಸರು: [ನಮೂದಿಸಿಲ್ಲ]</div>
+        <div class="footer-details">
+            <span class="blinking-text">Designed by : LAKSHMIKANTH R (Mob : 9844444871)</span>
+        </div>
+    </footer>
+
+    <script>
+        // Data Store for LBA Questions based on the provided PDF Question Banks
+        const lbaData = {
+            "1": {
+                name: "ಅಧ್ಯಾಯ 1: ವಿಜ್ಞಾನದ ಅದ್ಭುತ ಪ್ರಪಂಚ",
+                objectives: "ವಸ್ತುಗಳು ಮತ್ತು ಪ್ರಕೃತಿಯ ಬಗ್ಗೆ ಕುತೂಹಲ ಬೆಳೆಸಿಕೊಳ್ಳುವುದು ಹಾಗೂ ವೈಜ್ಞಾನಿಕ ವಿಧಾನದ ಹಂತಗಳನ್ನು ಅರಿಯುವುದು.",
+                writtenQ: [
+                    "ವಿಜ್ಞಾನ ಎಂದರೇನು?",
+                    "ವೈಜ್ಞಾನಿಕ ವಿಧಾನದ ಪ್ರಮುಖ ಹಂತಗಳನ್ನು ಹೆಸರಿಸಿ.",
+                    "ದೈನಂದಿನ ಜೀವನದಲ್ಲಿ ವೈಜ್ಞಾನಿಕ ವಿಧಾನವನ್ನು ಅನುಸರಿಸುವ ಒಂದು ಸನ್ನಿವೇಶವನ್ನು ವಿವರಿಸಿ."
+                ],
+                oralQ: [
+                    "ನಿಮ್ಮ ಸುತ್ತಮುತ್ತ ನೀವು ಕಾಣುವ ಯಾವುದಾದರೂ ಎರಡು ವಿಜ್ಞಾನದ ವಿಸ್ಮಯಗಳನ್ನು ತಿಳಿಸಿ.",
+                    "ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳುವುದು ಏಕೆ ಮುಖ್ಯ?"
+                ],
+                writtenAns: [
+                    "ವಿಜ್ಞಾನವು ನಾವು ವಾಸಿಸುತ್ತಿರುವ ಜಗತ್ತನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಮತ್ತು ಬ್ರಹ್ಮಾಂಡದ ರಹಸ್ಯಗಳನ್ನು ಹೊರಗೆಡಹಲು ಆಲೋಚಿಸುವ, ವೀಕ್ಷಿಸುವ ಮತ್ತು ಕಾರ್ಯನಡೆಸುವ ವಿಧಾನವಾಗಿದೆ.",
+                    "1. ಅವಲೋಕನ (Observation), 2. ಪ್ರಶ್ನಿಸುವುದು, 3. ಊಹೆ (Hypothesis), 4. ಪ್ರಯೋಗಗಳು/ಪರಿಶೀಲನೆ, 5. ಫಲಿತಾಂಶಗಳ ವಿಶ್ಲೇಷಣೆ.",
+                    "ಉದಾಹರಣೆಗೆ: ನಮ್ಮ ಮನೆಯಲ್ಲಿ ವಿದ್ಯುತ್ ಬಲ್ಬ್ ಉರಿಯದಿದ್ದಾಗ, ಸಮಸ್ಯೆ ಬಲ್ಬ್‌ನಲ್ಲಿದೆಯೋ ಅಥವಾ ಸ್ವಿಚ್‌ನಲ್ಲಿದೆಯೋ ಎಂದು ಪರಿಶೀಲಿಸಿ ಸರಿಪಡಿಸುವುದು."
+                ],
+                oralAns: [
+                    "ಮಳೆ ಬೀಳುವಿಕೆ ಮತ್ತು ಹೂವು ಅರಳುವಿಕೆ.",
+                    "ಕುತೂಹಲದಿಂದ ಹೊಸ ವಿಚಾರಗಳನ್ನು ತಿಳಿದುಕೊಳ್ಳಲು ಪ್ರಶ್ನೆಗಳು ಸಹಾಯ ಮಾಡುತ್ತವೆ."
+                ]
+            },
+            "2": {
+                name: "ಅಧ್ಯಾಯ 2: ಜೀವಜಗತ್ತಿನಲ್ಲಿ ವೈವಿಧ್ಯತೆ",
+                objectives: "ಸಸ್ಯಗಳು ಮತ್ತು ಪ್ರಾಣಿಗಳಲ್ಲಿನ ವೈವಿಧ್ಯತೆ, ನಾಳವಿನ್ಯಾಸ, ಬೇರುಗಳ ವಿಧಗಳು ಹಾಗೂ ಆವಾಸಸ್ಥಾನಗಳನ್ನು ತಿಳಿಯುವುದು.",
+                writtenQ: [
+                    "ತಾಯಿಬೇರು ವ್ಯವಸ್ಥೆ ಮತ್ತು ತಂತುಬೇರು ವ್ಯವಸ್ಥೆಗಳ ನಡುವಿನ ವ್ಯತ್ಯಾಸವೇನು?",
+                    "ಜಾಲಬಂಧ ನಾಳವಿನ್ಯಾಸ ಮತ್ತು ಸಮಾಂತರ ನಾಳವಿನ್ಯಾಸ ಎಂದರೇನು? ಉದಾಹರಣೆ ಕೊಡಿ.",
+                    "ಒಂಟೆಯು ಮರುಭೂಮಿಯಲ್ಲಿ ಜೀವಿಸಲು ಸಹಾಯಕವಾಗುವ ಎರಡು ಹೊಂದಾಣಿಕೆಗಳನ್ನು ತಿಳಿಸಿ."
+                ],
+                oralQ: [
+                    "ಉಭಯವಾಸಿಗಳಿಗೆ ಒಂದು ಉದಾಹರಣೆ ಕೊಡಿ.",
+                    "ಮರ, ಪೊದೆ ಮತ್ತು ಮೂಲಿಕೆಗಳಿಗೆ ವ್ಯತ್ಯಾಸವೇನು?"
+                ],
+                writtenAns: [
+                    "ತಾಯಿಬೇರು ವ್ಯವಸ್ಥೆಯು ಒಂದು ಮುಖ್ಯ ಬೇರನ್ನು ಹಾಗೂ ಕವಲೊಡೆದ ಸಣ್ಣ ಬೇರುಗಳನ್ನು ಹೊಂದಿರುತ್ತದೆ (ಉದಾ: ದಾಸವಾಳ). ತಂತುಬೇರು ವ್ಯವಸ್ಥೆಯು ಕಾಂಡದ ಬುಡದಿಂದ ಒಂದೇ ಗಾತ್ರದ ತೆಳುವಾದ ಬೇರುಗಳ ಗೊಂಚಲಾಗಿ ಬೆಳೆಯುತ್ತದೆ (ಉದಾ: ಹುಲ್ಲು).",
+                    "ಎಲೆಯ ಮೇಲಿನ ನಾಳಗಳು ಜಾಲದ ರೀತಿಯಲ್ಲಿ ಜೋಡಣೆಗೊಂಡಿದ್ದರೆ ಜಾಲಬಂಧ ನಾಳವಿನ್ಯಾಸ (ಉದಾ: ದಾಸವಾಳ). ನಾಳಗಳು ಸಮಾಂತರವಾಗಿದ್ದರೆ ಸಮಾಂತರ ನಾಳವಿನ್ಯಾಸ (ಉದಾ: ಬಾಳೆಎಲೆ/ಹುಲ್ಲು).",
+                    "1. ಅಗಲವಾದ ಗೊರಸುಗಳುಳ್ಳ ನೀಳವಾದ ಕಾಲುಗಳು ಮರಳಿನಲ್ಲಿ ಹೂತುಹೋಗದಂತೆ ತಡೆಯುತ್ತವೆ. 2. ಡುಬ್ಬದಲ್ಲಿ ಆಹಾರವನ್ನು ಶೇಖರಿಸಿಟ್ಟುಕೊಳ್ಳುತ್ತದೆ."
+                ],
+                oralAns: [
+                    "ಕಪ್ಪೆ.",
+                    "ಮರಗಳು ಗಟ್ಟಿಯಾದ ಎತ್ತರದ ಕಾಂಡ ಹೊಂದಿರುತ್ತವೆ; ಪೊದೆಗಳು ಮಧ್ಯಮ ಗಾತ್ರದ ಗಡಸು ಕಾಂಡ ಹೊಂದಿರುತ್ತವೆ; ಮೂಲಿಕೆಗಳು ತೆಳುವಾದ ಎಳಸು ಹಸಿರು ಕಾಂಡ ಹೊಂದಿರುತ್ತವೆ."
+                ]
+            },
+            "3": {
+                name: "ಅಧ್ಯಾಯ 3: ಮನದುಂಬಿದ ಊಟ : ಸ್ವಸ್ಥ ಶರೀರಕ್ಕೆ ಸೋಪಾನ",
+                objectives: "ಆಹಾರದ ವಿವಿಧ ಪೋಷಕಾಂಶಗಳು, ಅವುಗಳ ಆಕರಗಳು, ಪರೀಕ್ಷೆಗಳು ಮತ್ತು ಸಂತುಲಿತ ಆಹಾರದ ಮಹತ್ವ ತಿಳಿಯುವುದು.",
+                writtenQ: [
+                    "ಆಹಾರದಲ್ಲಿ ಪಿಷ್ಟದ (Starch) ಇರುವಿಕೆಯನ್ನು ಅಯೋಡಿನ್ ದ್ರಾವಣ ಬಳಸಿ ಹೇಗೆ ಪರೀಕ್ಷಿಸುವಿರಿ?",
+                    "శಕ್ತಿ ಒದಗಿಸುವ ಆಹಾರಗಳು ಮತ್ತು ದೇಹ ನಿರ್ಮಾಣಕಾರಕ ಆಹಾರಗಳಿಗೆ ಉದಾಹರಣೆ ಕೊಡಿ.",
+                    "ವಿಟಮಿನ್ 'ಸಿ' ಕೊರತೆಯಿಂದ ಬರುವ ರೋಗ ಯಾವುದು? ಅದರ ಲಕ್ಷಣಗಳೇನು?"
+                ],
+                oralQ: [
+                    "ದೇಹಕ್ಕೆ ನೀರು ಮತ್ತು ನಾರುಪದಾರ್ಥಗಳು ಏಕೆ ಅವಶ್ಯಕ?",
+                    "ಸಿರಿಧಾನ್ಯಗಳನ್ನು 'ಪೌಷ್ಟಿಕ-ಧಾನ್ಯಗಳು' ಎಂದುೇಕೆ ಕರೆಯುತ್ತಾರೆ?"
+                ],
+                writtenAns: [
+                    "ಆಹಾರ ಪದಾರ್ಥದ ಚೂರಿನ ಮೇಲೆ 2-3 ಹನಿ ಸಾರರಿಕ್ತ ಅಯೋಡಿನ್ ದ್ರಾವಣವನ್ನು ಹಾಕಿದಾಗ ಅದು ನೀಲಿ-ಕಪ್ಪು ಬಣ್ಣಕ್ಕೆ ತಿರುಗಿದರೆ ಅದರಲ್ಲಿ ಪಿಷ್ಟವಿದೆ ಎಂದು ತಿಳಿಯಬಹುದು.",
+                    "ಶಕ್ತಿ ಒದಗಿಸುವ ಆಹಾರಗಳು: ಕಾರ್ಬೋಹೈಡ್ರೆಟ್ ಮತ್ತು ಕೊಬ್ಬುಗಳು (ಉದಾ: ಅಕ್ಕಿ, ಗೋಧಿ, ತುಪ್ಪ). ದೇಹ ನಿರ್ಮಾಣಕಾರಕ ಆಹಾರಗಳು: ಪ್ರೋಟೀನ್‌ಗಳು (ಉದಾ: ಬೇಳೆಕಾಳುಗಳು, ಹಾಲು, ಮೊಟ್ಟೆ).",
+                    "ಸ್ಕರ್ವಿ (Scurvy). ಲಕ್ಷಣಗಳು: ರಕ್ತ ಒಸರುವ ವಸಡುಗಳು ಮತ್ತು ಗಾಯಗಳು ನಿಧಾನವಾಗಿ ವಾಸಿಯಾಗುವುದು."
+                ],
+                oralAns: [
+                    "ಪೋಷಕಾಂಶಗಳನ್ನು ಹೀರಿಕೊಳ್ಳಲು, ತ್ಯಾಜ್ಯ ಹೊರಹಾಕಲು ನೀರು ಹಾಗೂ ಜೀರ್ಣಕ್ರಿಯೆ ಸರಾಗವಾಗಲು ನಾರುಪದಾರ್ಥಗಳು ಬೇಕು.",
+                    "ಅವುಗಳಲ್ಲಿ ಜೀವಸತ್ವಗಳು, ಖನಿಜಗಳು ಮತ್ತು ನಾರುಪದಾರ್ಥಗಳು ಸಮೃದ್ಧವಾಗಿರುವುದರಿಂದ."
+                ]
+            },
+            "4": {
+                name: "ಅಧ್ಯಾಯ 4: ಕಾಂತಗಳ ಅನ್ವೇಷಣೆ",
+                objectives: "ಕಾಂತೀಯ ಹಾಗೂ ಅಕಾಂತೀಯ ವಸ್ತುಗಳು, ಕಾಂತದ ಧ್ರುವಗಳು ಮತ್ತು ದಿಕ್ಕುಗಳನ್ನು ಕಂಡುಹಿಡಿಯುವ ವಿಧಾನ ತಿಳಿಯುವುದು.",
+                writtenQ: [
+                    "ಕಾಂತೀಯ ವಸ್ತುಗಳು ಮತ್ತು ಅಕಾಂತೀಯ ವಸ್ತುಗಳು ಎಂದರೇನು? ಉದಾಹರಣೆ ಕೊಡಿ.",
+                    "ಸ್ವತಂತ್ರವಾಗಿ ತೂಗುಬಿಟ್ಟ ದಂಡಕಾಂತವು ಯಾವಾಗಲೂ ಯಾವ ದಿಕ್ಕಿನಲ್ಲಿ ವಿಶ್ರಾಂತ ಸ್ಥಿತಿಗೆ ಬರುತ್ತದೆ ಮತ್ತು ಯಾಕೆ?",
+                    "ಕಾಂತದ ಧ್ರುವಗಳು ಎಂದರೇನು?"
+                ],
+                oralQ: [
+                    "ಕಾಂತೀಯ ದಿಕ್ಕೂಚಿಯನ್ನು (Compass) ಯಾವ ಉದ್ದೇಶಕ್ಕಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ?",
+                    "ಕಾಂತದ ಸಮಾನ ಧ್ರುವಗಳು ಒಂದನ್ನೊಂದು ಏನು ಮಾಡುತ್ತವೆ?"
+                ],
+                writtenAns: [
+                    "ಕಾಂತದಿಂದ ಆಕರ್ಷಿಸಲ್ಪಡುವ ವಸ್ತುಗಳು ಕಾಂತೀಯ ವಸ್ತುಗಳು (ಉದಾ: ಕಬ್ಬಿಣ, ನಿಕ್ಕಲ್). ಆಕರ್ಷಿಸಲ್ಪಡದ ವಸ್ತುಗಳು ಅಕಾಂತೀಯ ವಸ್ತುಗಳು (ಉದಾ: ಪ್ಲಾಸ್ಟಿಕ್, ಮರ).",
+                    "ಉತ್ತರ-ದಕ್ಷಿಣ ದಿಕ್ಕಿನಲ್ಲಿ ವಿಶ್ರಾಂತ ಸ್ಥಿತಿಗೆ ಬರುತ್ತದೆ. ಏಕೆಂದರೆ ಭೂಮಿಯೂ ಸಹ ಒಂದು ಬೃಹತ್ ಕಾಂತನಂತೆ ವರ್ತಿಸುತ್ತದೆ.",
+                    "ಕಾಂತದ ತುದಿಗಳಲ್ಲಿ ಆಕರ್ಷಣಾ ಶಕ್ತಿ ಹೆಚ್ಚಿರುತ್ತದೆ, ಆ ತುದಿಗಳನ್ನು ಕಾಂತದ ಧ್ರುವಗಳು (ಉತ್ತರ ಧ್ರುವ ಮತ್ತು ದಕ್ಷಿಣ ಧ್ರುವ) ಎನ್ನುವರು."
+                ],
+                oralAns: [
+                    "ದಿಕ್ಕುಗಳನ್ನು (ಉತ್ತರ-ದಕ್ಷಿಣ) ನಿಖರವಾಗಿ ತಿಳಿಯಲು.",
+                    "ವಿಕರ್ಷಿಸುತ್ತವೆ (Repel)."
+                ]
+            },
+            "5": {
+                name: "ಅಧ್ಯಾಯ 5: ಉದ್ದದ ಅಳತೆ ಮತ್ತು ಚಲನೆ",
+                objectives: "ಉದ್ದದ ಮಾನಗಳು, ಅಳತೆ ಮಾಡುವ ಸರಿಯಾದ ವಿಧಾನ ಹಾಗೂ ವಿವಿಧ ರೀತಿಯ ಚಲನೆಗಳನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳುವುದು.",
+                writtenQ: [
+                    "ಉದ್ದದ ಎಸ್‌ಐ (SI) ಏಕಮಾನ ಯಾವುದು? ಸೆಂಟಿಮೀಟರ್ ಮತ್ತು ಮೀಟರ್ ನಡುವಿನ ಸಂಬಂಧವೇನು?",
+                    "ಆಂದೋಲನ ಚಲನೆ ಎಂದರೇನು? ಉದಾಹರಣೆ ಕೊಡಿ.",
+                    "ಅಳತೆ ಮಾಡುವಾಗ ಸ್ಕೇಲ್ ಬಳಸುವಾಗ ಕಣ್ಣಿನ ಸರಿಯಾದ ಸ್ಥಾನ ಹೇಗಿರಬೇಕು?"
+                ],
+                oralQ: [
+                    "ವರ್ತುಲ ಚಲನೆಗೆ (Circular Motion) ಒಂದು ಉದಾಹರಣೆ ಹೇಳಿ.",
+                    "ವಿಶ್ರಾಂತ ಸ್ಥಿತಿ ಮತ್ತು ಚಲನೆಯ ಸ್ಥಿತಿ ಎಂದರೇನು?"
+                ],
+                writtenAns: [
+                    "ಉದ್ದದ ಎಸ್‌ಐ ಏಕಮಾನ ಮೀಟರ್ (m) ಆಗಿದೆ. 1 ಮೀಟರ್ = 100 ಸೆಂಟಿಮೀಟರ್.",
+                    "ಒಂದು ನಿರ್ದಿಷ್ಟ ಬಿಂದುವಿನ ಮೂಲಕ ಹಿಂದೆ ಮುಂದೆ ಚಲಿಸುವ ವಸ್ತುವಿನ ಚಲನೆಯನ್ನು ಆಂದೋಲನ ಚಲನೆ ಎನ್ನುವರು (ಉದಾ: ಗಡಿಯಾರದ ಲೋಲಕ).",
+                    "ಕಣ್ಣು ಅಳತೆ ಮಾಡಬೇಕಾದ ಬಿಂದುವಿಗೆ ನೇರವಾಗಿ ಲಂಬವಾಗಿರಬೇಕು (Vertical position)."
+                ],
+                oralAns: [
+                    "ಸೀಲಿಂಗ್ ಫ್ಯಾನಿನ ರೆಕ್ಕೆಗಳ ಚಲನೆ ಅಥವಾ ಗಡಿಯಾರದ ಮುಳ್ಳುಗಳ ಚಲನೆ.",
+                    "ಕಾಲದೊಂದಿಗೆ ಸ್ಥಾನ ಬದಲಾಯಿಸದಿದ್ದರೆ ವಿಶ್ರಾಂತ ಸ್ಥಿತಿ, ಬದಲಾಯಿಸುತ್ತಿದ್ದರೆ ಚಲನೆಯ ಸ್ಥಿತಿ."
+                ]
+            },
+            "6": {
+                name: "ಅಧ್ಯಾಯ 6: ನಮ್ಮ ಸುತ್ತಲಿನ ಸಾಮಗ್ರಿಗಳು",
+                objectives: "ವಸ್ತುಗಳ ಗುಣಲಕ್ಷಣಗಳು, ದೃಶ್ಯತೆ (ಪಾರದರ್ಶಕ, ಅಪಾರದರ್ಶಕ) ಹಾಗೂ ವಸ್ತುಗಳ ಗುಂಪುಗಾರಿಕೆ ಅರಿಯುವುದು.",
+                writtenQ: [
+                    "ಪಾರದರ್ಶಕ, ಅಪಾರದರ್ಶಕ ಮತ್ತು ಅರೆಪಾರದರ್ಶಕ ವಸ್ತುಗಳೆಂದರೇನು? ಉದಾಹರಣೆ ಕೊಡಿ.",
+                    "ವಸ್ತುಗಳನ್ನು ಗುಂಪುಗಳಾಗಿ ವಿಂಗಡಿಸುವುದರ ಪ್ರಾಮುಖ್ಯತೆ ಏನು?",
+                    "ನೀರಿನಲ್ಲಿ ಕರಗುವ ಮತ್ತು ಕರಗದ ವಸ್ತುಗಳಿಗೆ ಉದಾಹರಣೆ ಕೊಡಿ."
+                ],
+                oralQ: [
+                    "ಗಾಜು ಯಾವ ರೀತಿಯ ವಸ್ತುವಾಗಿದೆ?",
+                    "ಮರದ ತುಂಡು ನೀರಿನಲ್ಲಿ ತೇಲುತ್ತದೆಯೋ ಅಥವಾ ಮುಳುಗುತ್ತದೆಯೋ?"
+                ],
+                writtenAns: [
+                    "ಪಾರದರ್ಶಕ: ವಸ್ತುಗಳ ಮೂಲಕ ಸ್ಪಷ್ಟವಾಗಿ ನೋಡಬಹುದು (ಉದಾ: ಶುದ್ಧ ಗಾಜು). ಅಪಾರದರ್ಶಕ: ನೋಡಲು ಸಾಧ್ಯವಿಲ್ಲ (ಉದಾ: ಮರದ ಹಲಗೆ). ಅರೆಪಾರದರ್ಶಕ: ಭಾಗಶಃ ನೋಡಬಹುದು (ಉದಾ: ಎಣ್ಣೆ ಸವರಿದ ಕಾಗದ).",
+                    "ವಸ್ತುಗಳನ್ನು ಸುಲಭವಾಗಿ ಗುರುತಿಸಲು, ಅಧ್ಯಯನ ಮಾಡಲು ಮತ್ತು ವ್ಯವಸ್ಥಿತವಾಗಿಡಲು ಗುಂಪುಗಾರಿಕೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.",
+                    "ನೀರಿನಲ್ಲಿ ಕರಗುವವು: ಉಪ್ಪು, ಸಕ್ಕರೆ. ಕರಗದವು: ಮರಳು, ಮರ."
+                ],
+                oralAns: [
+                    "ಪಾರದರ್ಶಕ ವಸ್ತು.",
+                    "ತೇಲುತ್ತದೆ."
+                ]
+            },
+            "7": {
+                name: "ಅಧ್ಯಾಯ 7: ತಾಪ ಮತ್ತು ಅದರ ಮಾಪನ",
+                objectives: "ತಾಪದ ಪರಿಕಲ್ಪನೆ, ವೈದ್ಯಕೀಯ ಮತ್ತು ಪ್ರಯೋಗಶಾಲಾ ತಾಪಮಾಪಕಗಳ ಬಳಕೆ ಮತ್ತು ಮುನ್ನೆಚ್ಚರಿಕೆಗಳು.",
+                writtenQ: [
+                    "ಆರೋಗ್ಯವಂತ ಮಾನವ ದೇಹದ ಸಾಮಾನ್ಯ ತಾಪಮಾನ ಎಷ್ಟು? ಇದನ್ನು ಸೆಲ್ಸಿಯಸ್ ಮತ್ತು ಫ್ಯಾರನ್‌ಹೀಟ್ ಮಾಪಕದಲ್ಲಿ ತಿಳಿಸಿ.",
+                    "ವೈದ್ಯಕೀಯ ತಾಪಮಾಪಕ ಬಳಸುವಾಗ ತೆಗೆದುಕೊಳ್ಳಬೇಕಾದ ಮುನ್ನೆಚ್ಚರಿಕೆಗಳೇನು?",
+                    "ಪ್ರಯೋಗಶಾಲಾ ತಾಪಮಾಪಕ ಮತ್ತು ವೈದ್ಯಕೀಯ ತಾಪಮಾಪಕದ ಮುಖ್ಯ ವ್ಯತ್ಯಾಸವೇನು?"
+                ],
+                oralQ: [
+                    "ತಾಪದ ಎಸ್‌ಐ (SI) ಏಕಮಾನ ಯಾವುದು?",
+                    "ಕುದಿಯುವ ನೀರಿನ ತಾಪಮಾನ ಎಷ್ಟು?"
+                ],
+                writtenAns: [
+                    "ಸಾಮಾನ್ಯ ತಾಪಮಾನ: 37.0 °C ಅಥವಾ 98.6 °F ಆಗಿದೆ.",
+                    "1. ಬಳಕೆಯ ಮೊದಲು ಮತ್ತು ನಂತರ ಸಾಬೂನು ನೀರಿನಿಂದ ತೊಳೆಯಬೇಕು. 2. ಡಿಜಿಟಲ್ ಭಾಗ ನೀರಿನಲ್ಲಿ ಮುಳುಗಬಾರದು. 3. ತುದಿಯನ್ನು ಹಿಡಿದು ಅಳತೆ ಮಾಡಬಾರದು.",
+                    "ವೈದ್ಯಕೀಯ ತಾಪಮಾಪಕವನ್ನು ಮಾನವ ದೇಹದ ತಾಪ ಅಳೆಯಲು (ವ್ಯಾಪ್ತಿ ಕಿರಿದು) ಬಳಸಲಾಗುತ್ತದೆ; ಪ್ರಯೋಗಶಾಲಾ ತಾಪಮಾಪಕವನ್ನು ಇತರ ವಸ್ತುಗಳ ತಾಪ ಅಳೆಯಲು (ವ್ಯಾಪ್ತಿ -10°C ನಿಂದ 110°C) ಬಳಸಲಾಗುತ್ತದೆ."
+                ],
+                oralAns: [
+                    "ಕೆಲ್ವಿನ್ (K).",
+                    "100 °C."
+                ]
+            },
+            "8": {
+                name: "ಅಧ್ಯಾಯ 8: ನೀರಿನ ಸ್ಥಿತಿಗಳ ಮೂಲಕ ಒಂದು ಪಯಣ",
+                objectives: "ನೀರಿನ ವಿವಿಧ ಭೌತ ಸ್ಥಿತಿಗಳು, ಆವೀಕರಣ, ಸಾಂದ್ರೀಕರಣ ಮತ್ತು ಜಲಚಕ್ರದ ಹಂತಗಳನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳುವುದು.",
+                writtenQ: [
+                    "ಆವೀಕರಣ (Evaporation) ಮತ್ತು ಸಾಂದ್ರೀಕರಣ (Condensation) ಎಂದರೇನು?",
+                    "ಜಲಚಕ್ರ (Water Cycle) ಎಂದರೇನು? ಸಂಕ್ಷಿಪ್ತವಾಗಿ ವಿವರಿಸಿ.",
+                    "ಮಣ್ಣಿನ ಮಡಕೆಗಳಲ್ಲಿ ನೀರು ಏಕೆ ತಂಪಾಗಿರುತ್ತದೆ?"
+                ],
+                oralQ: [
+                    "ನೀರಿನ ಮೂರು ಭೌತ ಸ್ಥಿತಿಗಳು ಯಾವುವು?",
+                    "ಮಳೆ ಹೇಗೆ ಉಂಟಾಗುತ್ತದೆ?"
+                ],
+                writtenAns: [
+                    "ಆವೀಕರಣ: ನೀರು ಆವಿ ಸ್ಥಿತಿಗೆ ಪರಿವರ್ತನೆಯಾಗುವ ಪ್ರಕ್ರಿಯೆ. ಸಾಂದ್ರೀಕರಣ: ನೀರಾವಿಯು ದ್ರವ ಸ್ಥಿತಿಗೆ (ನೀರಿನ ಹನಿಗಳಾಗಿ) ಪರಿವರ್ತನೆಗೊಳ್ಳುವ ಪ್ರಕ್ರಿಯೆ.",
+                    "ಸಾಗರ ಮತ್ತು ಭೂಮಿಯ ಮೇಲಿನ ನೀರು ಆವಿಯಾಗಿ ಮೇಲೇರಿ, ಸಾಂದ್ರೀಗೊಂಡು ಮೋಡವಾಗಿ, ಮಳೆಯಾಗಿ ಮತ್ತೆ ಭೂಮಿಯನ್ನು ಸೇರುವ ಪರಿಚಲನೆಯನ್ನು ಜಲಚಕ್ರ ಎನ್ನುವರು.",
+                    "ಮಣ್ಣಿನ ಮಡಕೆಯ ಹೊರ ಮೇಲ್ಮೈ ಮೂಲಕ ನೀರು ಒಸರಿ ಆವಿಯಾಗುವುದರಿಂದ (ತಂಪಿನ ಪರಿಣಾಮ) ಒಳಗಿನ ನೀರು ತಂಪಾಗಿರುತ್ತದೆ."
+                ],
+                oralAns: [
+                    "ಘನ (ಮಂಜುಗಡ್ಡೆ), ದ್ರವ (ನೀರು), ಅನಿಲ (ನೀರಾವಿ).",
+                    "ಮೋಡಗಳಲ್ಲಿರುವ ನೀರಿನ ಹನಿಗಳು ಭಾರವಾಗಿ ಮಳೆಯಾಗಿ ಕೆಳಗೆ ಬೀಳುತ್ತವೆ."
+                ],
+            },
+            "9": {
+                name: "ಅಧ್ಯಾಯ 9: ದೈನಂದಿನ ಜೀವನದಲ್ಲಿ ಬೇರ್ಪಡಿಸುವಿಕೆಯ ವಿಧಾನಗಳು",
+                objectives: "ಮಿಶ್ರಣಗಳಿಂದ ಪದಾರ್ಥಗಳನ್ನು ಬೇರ್ಪಡಿಸುವ ವಿವಿಧ ವಿಧಾನಗಳಾದ ತೂರುವಿಕೆ, ಜರಡಿ ಹಿಡಿಯುವಿಕೆ, ಸೋಸುವಿಕೆ ಅರಿಯುವುದು.",
+                writtenQ: [
+                    "ತೂರುವಿಕೆ (Winnowing) ಎಂದರೇನು? ಇದನ್ನು ಯಾವ ಸಂದರ್ಭದಲ್ಲಿ ಬಳಸುತ್ತಾರೆ?",
+                    "ಜರಡಿ ಹಿಡಿಯುವಿಕೆ (Sieving) ಎಂದರೇನು? ಉದಾಹರಣೆ ಕೊಡಿ.",
+                    "ಸೋಸುವಿಕೆ (Filtration) ಪ್ರಕ್ರಿಯೆಗೆ ಒಂದು ಉದಾಹರಣೆ ಕೊಡಿ."
+                ],
+                oralQ: [
+                    "ಚಹಾ ತಯಾರಿಸಿದ ನಂತರ ಚಹಾ ಎಲೆಗಳನ್ನು ಚಹಾದಿಂದ ಬೇರ್ಪಡಿಸಲು ಯಾವ ವಿಧಾನ ಬಳಸುವಿರಿ?",
+                    "ಕಡೆಯುವಿಕೆ (Churning) ವಿಧಾನದಿಂದ ಏನು ಬೇರ್ಪಡಿಸುತ್ತಾರೆ?"
+                ],
+                writtenAns: [
+                    "ಮಾರುತ ಅಥವಾ ಬೀಸುವ ಗಾಳಿಯ ಮೂಲಕ ಮಿಶ್ರಣದಲ್ಲಿರುವ ಭಾರವಾದ ಮತ್ತು ಹಗುರವಾದ ಘಟಕಗಳನ್ನು (ಉದಾ: ಗೋಧಿ ಕಾಳು ಮತ್ತು ಹೊಟ್ಟು) ಬೇರ್ಪಡಿಸುವ ವಿಧಾನವೇ ತೂರುವಿಕೆ.",
+                    "ವಿಭಿನ್ನ ಗಾತ್ರದ ಕಣಗಳನ್ನು ಹೊಂದಿರುವ ಘನ-ಘನ ಮಿಶ್ರಣವನ್ನು ಜರಡಿ ಬಳಸಿ ಬೇರ್ಪಡಿಸುವ ವಿಧಾನ (ಉದಾ: ಗೋಧಿ ಹಿಟ್ಟಿನಲ್ಲಿ ತೌಡು ತೆಗೆಯುವುದು).",
+                    "ಕೆಸರು ನೀರನ್ನು ಸೋಸುಕಾಗದ ಬಳಸಿ ಶುದ್ಧ ನೀರು ಪಡೆಯುವುದು."
+                ],
+                oralAns: [
+                    "ಸೋಸುವಿಕೆ (Filtration / Tea strainer).",
+                    "ಮೊಸರಿನಿಂದ ಬೆಣ್ಣೆ."
+                ]
+            },
+            "10": {
+                name: "ಅಧ್ಯಾಯ 10: ಜೀವಿಗಳು: ಅವುಗಳ ಗುಣಗಳ ಅನ್ವೇಷಣೆ",
+                objectives: "ಸಜೀವ ಮತ್ತು ನಿರ್ಜೀವ ವಸ್ತುಗಳ ವ್ಯತ್ಯಾಸಗಳು, ಜೀವಿಗಳ ಲಕ್ಷಣಗಳು ಹಾಗೂ ಬೀಜ ಮೊಳೆಯಲು ಬೇಕಾದ ಪರಿಸ್ಥಿತಿಗಳು.",
+                writtenQ: [
+                    "ಜೀವಿಗಳ ಪ್ರಮುಖ ಲಕ್ಷಣಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡಿ.",
+                    "ಬೀಜ ಮೊಳೆಯಲು (Seed germination) ಯಾವ ಪ್ರಮುಖ ಪರಿಸ್ಥಿತಿಗಳು ಅವಶ್ಯಕ?",
+                    "ಸಸ್ಯಗಳು ಪ್ರಚೋದನೆಗಳಿಗೆ ಹೇಗೆ ಪ್ರತಿಕ್ರಿಯಿಸುತ್ತವೆ? ಉದಾಹರಣೆ ಕೊಡಿ."
+                ],
+                oralQ: [
+                    "ಸಸ್ಯಗಳಲ್ಲಿ ಉಸಿರಾಟಕ್ಕೆ ಸಹಾಯ ಮಾಡುವ ಎಲೆಯ ಮೇಲಿನ ಸೂಕ್ಷ್ಮ ರಂಧ್ರಗಳ ಹೆಸರೇನು?",
+                    "ಉಭಯವಾಸಿ ಪ್ರಾಣಿಗಳಿಗೆ ಉದಾಹರಣೆ ಕೊಡಿ."
+                ],
+                writtenAns: [
+                    "1. ಚಲನೆ, 2. ಬೆಳವಣಿಗೆ, 3. ಉಸಿರಾಟ, 4. ವಿಸರ್ಜನೆ, 5. ಸಂತಾನೋತ್ಪತ್ತಿ, 6. ಪ್ರಚೋದನೆಗೆ ಪ್ರತಿಕ್ರಿಯೆ.",
+                    "ಸರಿಯಾದ ಪ್ರಮಾಣದ ನೀರು ಮತ್ತು ಗಾಳಿ (ಆಮ್ಲಜನಕ).",
+                    "ಮುಟ್ಟಿದರೆಮುನಿ (ನಾಚಿಕೆ ಮುಳ್ಳಿನ ಗಿಡ) ಎಲೆಗಳನ್ನು ಮುಟ್ಟಿದಾಗ ಮುದುಡಿಕೊಳ್ಳುತ್ತವೆ."
+                ],
+                oralAns: [
+                    "ಪತ್ರರಂಧ್ರ (Stomata).",
+                    "ಕಪ್ಪೆ."
+                ]
+            }
+        };
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function goToLessonPlan() {
+            const school = document.getElementById('schoolNameInput').value.trim();
+            const teacher = document.getElementById('teacherNameInput').value.trim();
+            const lessonKey = document.getElementById('lessonSelect').value;
+
+            if(!school || !teacher || !lessonKey) {
+                alert('ದಯವಿಟ್ಟು ಎಲ್ಲಾ ವಿವರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ.');
+                return;
+            }
+
+            // Update footer and hidden fields
+            document.getElementById('footerSchool').innerText = "ಶಾಲೆಯ ಹೆಸರು: " + school;
+            document.getElementById('footerTeacher').innerText = "ಶಿಕ್ಷಕರ ಹೆಸರು: " + teacher;
+
+            const lesson = lbaData[lessonKey];
+            const html = `
+                <h3>${lesson.name}</h3>
+                <p><strong>ಬೋಧನಾ ಉದ್ದೇಶಗಳು ಹಾಗೂ ಕಲಿಕಾ ಫಲಗಳು (Competencies & Learning Outcomes):</strong></p>
+                <p>${lesson.objectives}</p>
+                <br>
+                <p><strong>ಬೋಧನಾ ಕ್ರಮ ಮತ್ತು ಚಟುವಟಿಕೆಗಳು:</strong></p>
+                <ul>
+                    <li>ವಿದ್ಯಾರ್ಥಿಗಳ ದೈನಂದಿನ ಅನುಭವಗಳೊಂದಿಗೆ ವಿಷಯವನ್ನು ಜೋಡಿಸುವುದು.</li>
+                    <li>ಪ್ರಯೋಗಗಳು ಹಾಗೂ ಚರ್ಚೆಗಳ ಮೂಲಕ ಪರಿಕಲ್ಪನೆಗಳನ್ನು ಸ್ಪಷ್ಟಪಡಿಸುವುದು.</li>
+                    <li>LBA (ಘಟಕ ಆಧಾರಿತ ಮೌಲ್ಯಮಾಪನ) ಮಾನದಂಡಗಳನ್ವಯ ವಿದ್ಯಾರ್ಥಿಗಳ ಪ್ರಗತಿ ಪರಿಶೀಲನೆ.</li>
+                </ul>
+            `;
+            document.getElementById('lessonPlanContent').innerHTML = html;
+            switchPage('page-lesson-plan');
+        }
+
+        function goToQuestionPaper() {
+            const lessonKey = document.getElementById('lessonSelect').value;
+            const lesson = lbaData[lessonKey];
+            const school = document.getElementById('schoolNameInput').value;
+
+            let html = `
+                <div style="text-align:center; margin-bottom: 20px;">
+                    <h3>${school}</h3>
+                    <h4>6ನೇ ತರಗತಿ - ವಿಜ್ಞಾನ (ಕುತೂಹಲ) | ಘಟಕ ಆಧಾರಿತ ಮೌಲ್ಯಮಾಪನ (LBA)</h4>
+                    <p><strong>${lesson.name}</strong></p>
+                    <p>ಒಟ್ಟು ಅಂಕಗಳು: 20 (ಲಿಖಿತ: 15, ಮೌಖಿಕ: 5)</p>
+                </div>
+                <hr style="border: 0.5px solid #ccc; margin-bottom: 15px;">
+                
+                <h4>ಭಾಗ - ಅ: ಲಿಖಿತ ಪರೀಕ್ಷೆ (15 ಅಂಕಗಳು)</h4>
+                <ol>
+            `;
+
+            lesson.writtenQ.forEach((q, idx) => {
+                html += `<li class="question-item">${q} <em>(5 ಅಂಕಗಳು)</em><div style="height: 60px; border-bottom: 1px dotted #bbb; margin-top:5px;"></div></li>`;
+            });
+
+            html += `
+                </ol>
+                <h4>ಭಾಗ - ಬ: ಮೌಖಿಕ ಪರೀಕ್ಷೆ (5 ಅಂಕಗಳು)</h4>
+                <ol>
+            `;
+
+            lesson.oralQ.forEach((q, idx) => {
+                html += `<li class="question-item">${q} <em>(2.5 ಅಂಕಗಳು)</em></li>`;
+            });
+
+            html += `</ol>`;
+
+            document.getElementById('questionPaperContent').innerHTML = html;
+            switchPage('page-question-paper');
+        }
+
+        function goToAnswers() {
+            const lessonKey = document.getElementById('lessonSelect').value;
+            const lesson = lbaData[lessonKey];
+
+            let html = `
+                <h3>ಮಾದರಿ ಉತ್ತರಗಳು (Answer Key)</h3>
+                <h4>ಲಿಖಿತ ಪ್ರಶ್ನೆಗಳ ಉತ್ತರಗಳು:</h4>
+                <ol>
+            `;
+
+            lesson.writtenAns.forEach((ans, idx) => {
+                html += `<li style="margin-bottom: 12px;"><strong>ಉತ್ತರ ${idx+1}:</strong> ${ans}</li>`;
+            });
+
+            html += `
+                </ol>
+                <h4>ಮೌಖಿಕ ಪ್ರಶ್ನೆಗಳ ಮಾದರಿ ಉತ್ತರಗಳು:</h4>
+                <ol>
+            `;
+
+            lesson.oralAns.forEach((ans, idx) => {
+                html += `<li style="margin-bottom: 12px;"><strong>ಉತ್ತರ ${idx+1}:</strong> ${ans}</li>`;
+            });
+
+            html += `</ol>`;
+
+            document.getElementById('answersContent').innerHTML = html;
+            switchPage('page-answers');
+        }
+
+        function resetApp() {
+            document.getElementById('entryForm').reset();
+            switchPage('page-entry');
+        }
+    </script>
+</body>
+</html>
